@@ -214,8 +214,10 @@ vi .env
 ### 동작 방식
 
 1. GitHub Actions 러너에서 `./gradlew bootJar` 빌드
-2. 빌드된 JAR을 EC2의 `~/edudy/app.jar`로 SCP
-3. SSH로 `docker compose up -d --build` 실행
+2. Docker 이미지를 빌드하여 `ghcr.io/leewj12/edudy:latest`로 Push
+3. SSH로 EC2 접속 → `git pull` → `docker compose pull` → `docker compose up -d`
+
+EC2에서는 이미지를 Pull만 하므로 서버 리소스를 절약하고 배포 안정성이 높습니다.
 
 ---
 
