@@ -123,8 +123,8 @@ public class LectureController {
     public ResponseEntity<?> updateLecture(
             @PathVariable Long id,
             @RequestPart("request") LectureUpdateRequest request,
-            @RequestParam(value = "LectureThumbnail", required = false) MultipartFile thumbnail,
-            @RequestParam(value = "LectureContentImage", required = false) MultipartFile contentImage
+            @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnail,
+            @RequestParam(value = "contentImageFile", required = false) MultipartFile contentImage
 
     ) {
         lectureService.updateLecture(id, request, thumbnail, contentImage);
