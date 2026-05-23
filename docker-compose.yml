@@ -1,0 +1,23 @@
+services:
+  app:
+    build: .
+    container_name: p4-edudy
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    volumes:
+      - upload_data:/app/upload
+    networks:
+      - koslearn_default
+
+volumes:
+  upload_data:
+
+networks:
+  koslearn_default:
+    external: true
