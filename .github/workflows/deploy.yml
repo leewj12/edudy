@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,6 +24,16 @@ jobs:
       - name: Build JAR
         run: ./gradlew bootJar -x test --no-daemon
 
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build & Push Docker Image
+        run: |
+          JAR=$(find build/libs -name "*.jar" -not -name "*plain*" | head -1)
+          cp "$JAR" app.jar
+          docker build -t ghcr.io/leewj12/edudy:latest .
+          docker push ghcr.io/leewj12/edudy:latest
+
       - name: Deploy to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
@@ -30,6 +44,4 @@ jobs:
           echo "$SSH_KEY_B64" | base64 --ignore-garbage -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          JAR=$(find build/libs -name "*.jar" -not -name "*plain*" | head -1)
-          scp "$JAR" "$EC2_USER@$EC2_HOST:~/edudy/app.jar"
-          ssh "$EC2_USER@$EC2_HOST" "cd ~/edudy && git pull origin main && docker compose up -d --build"
+          ssh "$EC2_USER@$EC2_HOST" "cd ~/edudy && git pull origin main && docker compose pull && docker compose up -d"

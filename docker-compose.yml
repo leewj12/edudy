@@ -1,6 +1,6 @@
 services:
   app:
-    build: .
+    image: ghcr.io/leewj12/edudy:latest
     container_name: p4-edudy
     restart: unless-stopped
     ports:
