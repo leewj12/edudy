@@ -10,7 +10,6 @@ import com.kosmo.backend.user.entity.SnsType;
 import com.kosmo.backend.user.entity.UserEntity;
 import com.kosmo.backend.user.entity.UserStatus;
 import com.kosmo.backend.user.repository.UserRepository;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -38,7 +37,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
-    private final ServletContext servletContext;
     /**
      * 로그인 검증: 이메일과 비밀번호 일치 확인
      * 성공하면 사용자 email 반환 (→ JWT 생성용)
@@ -411,8 +409,8 @@ public class UserService {
                     .substring(file.getOriginalFilename().lastIndexOf("."));
             String filename = uuid + ext;
 
-            // ✅ webapp 내부의 /upload/banner/ 등 경로로 저장
-            String uploadBasePath = servletContext.getRealPath("/upload/" + folder);
+            // ✅ user.dir 기준으로 저장 (Docker: /app/upload/, 로컬: ./upload/)
+            String uploadBasePath = System.getProperty("user.dir") + "/upload/" + folder;
             Path savePath = Paths.get(uploadBasePath, filename);
 
             Files.createDirectories(savePath.getParent());

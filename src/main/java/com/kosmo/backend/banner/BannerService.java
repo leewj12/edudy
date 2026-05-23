@@ -7,7 +7,6 @@ import com.kosmo.backend.global.exception.CustomAuthException;
 import com.kosmo.backend.global.exception.ErrorCode;
 import com.kosmo.backend.lecture.entity.LectureEntity;
 import com.kosmo.backend.lecture.repository.LectureRepository;
-import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,6 @@ public class BannerService {
 
     private final BannerRepository bannerRepository;
     private final LectureRepository lectureRepository;
-    private final ServletContext servletContext;
 
     @Transactional
     public void createBanner(Long lectureId, Long bannerPriority, MultipartFile bannerImageFile) {
@@ -135,8 +133,8 @@ public void updateBanner(Long bannerId, Long lectureId, Long bannerPriority, Mul
     LectureEntity lecture = lectureRepository.findById(lectureId)
             .orElseThrow(() -> new CustomAuthException(ErrorCode.LECTURE_NOT_FOUND));
 
-    // ✅ webapp 내부의 /upload/banner/ 경로로 설정
-    String basePath = servletContext.getRealPath("/upload/banner/");
+    // ✅ user.dir 기준으로 설정 (Docker: /app/upload/, 로컬: ./upload/)
+    String basePath = System.getProperty("user.dir") + "/upload/banner/";
 
     if (bannerImageFile != null && !bannerImageFile.isEmpty()) {
         String oldImage = banner.getBannerImage();
@@ -207,10 +205,10 @@ public void updateBanner(Long bannerId, Long lectureId, Long bannerPriority, Mul
         BannerEntity banner = bannerRepository.findById(bannerId)
                 .orElseThrow(() -> new CustomAuthException(ErrorCode.BANNER_NOT_FOUND));
 
-        // ✅ 실제 웹 경로 기준으로 배너 이미지 삭제
+        // ✅ user.dir 기준으로 배너 이미지 삭제
         String bannerImage = banner.getBannerImage();
         if (bannerImage != null && !bannerImage.equals("bannerDefault.jpg")) {
-            String uploadBasePath = servletContext.getRealPath("/upload/banner/");
+            String uploadBasePath = System.getProperty("user.dir") + "/upload/banner/";
             Path imagePath = Paths.get(uploadBasePath, bannerImage);
             try {
                 Files.deleteIfExists(imagePath);
@@ -253,8 +251,8 @@ public void updateBanner(Long bannerId, Long lectureId, Long bannerPriority, Mul
                     .substring(file.getOriginalFilename().lastIndexOf("."));
             String filename = uuid + ext;
 
-            // ✅ webapp 내부의 /upload/banner/ 등 경로로 저장
-            String uploadBasePath = servletContext.getRealPath("/upload/" + folder);
+            // ✅ user.dir 기준으로 저장 (Docker: /app/upload/, 로컬: ./upload/)
+            String uploadBasePath = System.getProperty("user.dir") + "/upload/" + folder;
             Path savePath = Paths.get(uploadBasePath, filename);
 
             Files.createDirectories(savePath.getParent());

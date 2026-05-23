@@ -12,7 +12,6 @@ import com.kosmo.backend.lecture.entity.LectureEntity;
 import com.kosmo.backend.lecture.repository.LectureRepository;
 import com.kosmo.backend.lecture.subject.LectureSubjectEntity;
 import com.kosmo.backend.lecture.subject.LectureSubjectRepository;
-import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,6 @@ public class LectureService {
     private final LectureSubjectRepository lectureSubjectRepository;
     private final LectureCategoryRepository lectureCategoryRepository;
     private final BannerRepository bannerRepository;
-    private final ServletContext servletContext; // ✅ 추가
 
     @Transactional
     public void createLecture(LectureCreateRequest request, MultipartFile thumbnailFile, MultipartFile contentImageFile) {
@@ -257,7 +255,7 @@ public class LectureService {
 
         String thumbnail = lecture.getLectureThumbnail();
         if (thumbnail != null && !thumbnail.equals("lectureNoImage.jpg")) {
-            Path thumbnailPath = Paths.get(servletContext.getRealPath("/upload/lecture/thumbnail/"), thumbnail);
+            Path thumbnailPath = Paths.get(System.getProperty("user.dir") + "/upload/lecture/thumbnail/", thumbnail);
             try {
                 Files.deleteIfExists(thumbnailPath);
             } catch (IOException e) {
@@ -267,7 +265,7 @@ public class LectureService {
 
         String contentImage = lecture.getLectureContentImage();
         if (contentImage != null && !contentImage.equals("lectureContentDefault.jpg")) {
-            Path contentPath = Paths.get(servletContext.getRealPath("/upload/lecture/content/"), contentImage);
+            Path contentPath = Paths.get(System.getProperty("user.dir") + "/upload/lecture/content/", contentImage);
             try {
                 Files.deleteIfExists(contentPath);
             } catch (IOException e) {
@@ -347,7 +345,7 @@ public class LectureService {
         if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
             String oldThumbnail = lecture.getLectureThumbnail();
             if (oldThumbnail != null && !oldThumbnail.equals("lectureNoImage.jpg")) {
-                Path oldPath = Paths.get(servletContext.getRealPath("/upload/lecture/thumbnail/"), oldThumbnail);
+                Path oldPath = Paths.get(System.getProperty("user.dir") + "/upload/lecture/thumbnail/", oldThumbnail);
                 try {
                     Files.deleteIfExists(oldPath);
                 } catch (IOException e) {
@@ -363,7 +361,7 @@ public class LectureService {
         if (contentImageFile != null && !contentImageFile.isEmpty()) {
             String oldContentImage = lecture.getLectureContentImage();
             if (oldContentImage != null && !oldContentImage.equals("lectureContentDefault.jpg")) {
-                Path oldPath = Paths.get(servletContext.getRealPath("/upload/lecture/content/"), oldContentImage);
+                Path oldPath = Paths.get(System.getProperty("user.dir") + "/upload/lecture/content/", oldContentImage);
                 try {
                     Files.deleteIfExists(oldPath);
                 } catch (IOException e) {
@@ -530,8 +528,8 @@ public class LectureService {
                     .substring(file.getOriginalFilename().lastIndexOf("."));
             String filename = uuid + ext;
 
-            // ✅ 실제 웹 경로 기준으로 저장
-            String uploadBasePath = servletContext.getRealPath("/upload/" + folder);
+            // ✅ user.dir 기준으로 저장 (Docker: /app/upload/, 로컬: ./upload/)
+            String uploadBasePath = System.getProperty("user.dir") + "/upload/" + folder;
             Path savePath = Paths.get(uploadBasePath, filename);
 
             Files.createDirectories(savePath.getParent());
