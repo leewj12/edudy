@@ -23,7 +23,7 @@ Spring Boot 기반의 교육 기관 관리 시스템 백엔드 API입니다.
 | 항목 | 내용 |
 |------|------|
 | 프로젝트 유형 | 팀 프로젝트 (포트폴리오) |
-| 개발 기간 | 2024.11 ~ 2024.12 |
+| 개발 기간 | 2025.06 |
 | 서버 포트 | 8083 (로컬) / 9092 (Docker) |
 | 데이터베이스 | MySQL 8.0, 스키마: `proj4_db` |
 | 프론트엔드 | [edudy-front](https://github.com/leewj12/edudy-front) (React + Vite, Vercel 배포) |
