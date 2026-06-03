@@ -25,7 +25,7 @@ Spring Boot 기반의 교육 기관 관리 시스템 백엔드 API입니다.
 | 프로젝트 유형 | 팀 프로젝트 (포트폴리오) |
 | 개발 기간 | 2025.06 |
 | 서버 포트 | 8083 (로컬) / 9092 (Docker) |
-| 데이터베이스 | MySQL 8.0, 스키마: `proj4_db` |
+| 데이터베이스 | MySQL 8.0, 스키마: `edudy` |
 | 프론트엔드 | [edudy-front](https://github.com/leewj12/edudy-front) (React + Vite, Vercel 배포) |
 | 프론트엔드 배포 | [edudy.wonjae.cloud](https://edudy.wonjae.cloud) |
 | API 서버 | [api.edudy.wonjae.cloud](https://api.edudy.wonjae.cloud) |
@@ -117,7 +117,7 @@ Spring Boot 기반의 교육 기관 관리 시스템 백엔드 API입니다.
 ### 1. 데이터베이스 준비
 
 ```sql
-CREATE DATABASE proj4_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE edudy CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ### 2. 환경 설정
@@ -125,7 +125,7 @@ CREATE DATABASE proj4_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 `src/main/resources/application-local.yml`을 생성합니다 (`.gitignore`에 포함되어 커밋되지 않습니다).
 
 ```yaml
-DB_URL: jdbc:mysql://localhost:3306/proj4_db
+DB_URL: jdbc:mysql://localhost:3306/edudy
 DB_USERNAME: root
 DB_PASSWORD: your_mysql_password
 JWT_SECRET: your_jwt_secret_here
@@ -166,7 +166,7 @@ cp .env.example .env
 기존 `projects-mysql` 컨테이너에 접속하여 스키마를 생성합니다.
 
 ```bash
-docker exec -it projects-mysql mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS proj4_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+docker exec -it projects-mysql mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS edudy CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 ```
 
 ### 4. 빌드 및 실행
