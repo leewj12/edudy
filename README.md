@@ -3,6 +3,8 @@
 Spring Boot 기반의 교육 기관 관리 시스템 백엔드 API입니다.
 수강생·강사·관리자 역할을 구분하고, 강의 관리부터 출결·상담·성적·설문까지 전 과정을 지원합니다.
 
+> ⚠️ **라이브 데모 종료 (2026-09)** — 포트폴리오 인프라(AWS) 비용 정리로 배포 서비스를 종료했습니다. 아래 배포 주소는 더 이상 정상 동작하지 않으며, 코드·구성 문서는 참고용으로 유지됩니다.
+
 ---
 
 ## 목차
@@ -27,8 +29,8 @@ Spring Boot 기반의 교육 기관 관리 시스템 백엔드 API입니다.
 | 서버 포트 | 8083 (로컬) / 9092 (Docker) |
 | 데이터베이스 | MySQL 8.0, 스키마: `edudy` |
 | 프론트엔드 | [edudy-front](https://github.com/leewj12/edudy-front) (React + Vite, Vercel 배포) |
-| 프론트엔드 배포 | [edudy.wonjae.cloud](https://edudy.wonjae.cloud) |
-| API 서버 | [api.edudy.wonjae.cloud](https://api.edudy.wonjae.cloud) |
+| 프론트엔드 배포 | ~~edudy.wonjae.cloud~~ (서비스 종료 2026-09) |
+| API 서버 | ~~api.edudy.wonjae.cloud~~ (서비스 종료 2026-09) |
 
 ---
 
@@ -225,7 +227,7 @@ EC2에서는 이미지를 Pull만 하므로 서버 리소스를 절약하고 배
 ## EC2 배포
 
 - **서버**: AWS EC2 t3.small (Ubuntu, 서울 리전)
-- **도메인**: [edudy.wonjae.cloud](https://edudy.wonjae.cloud)
+- **도메인**: ~~edudy.wonjae.cloud~~ (서비스 종료 2026-09)
 - **SSL**: Let's Encrypt (Certbot, 자동 갱신)
 - **리버스 프록시**: Nginx (포트 80/443 → 앱 9092)
 - **실행 방식**: Docker Compose (기존 mysql 컨테이너 공유)
